@@ -50,7 +50,7 @@ class Attention(nn.Module):
     def forward(self, x):
         x = self.norm(x)
 
-        qkv = self.to_qkv(x).chunk(3, dim = -1)
+        qkv = self.to_qkv(x).chunk(3, dim = -1)  # (b, n, c)*(c, inner_dim*3)=(b, n, inner_dim*3)
         q, k, v = map(lambda t: rearrange(t, 'b n (h d) -> b h n d', h = self.heads), qkv)
 
         dots = torch.matmul(q, k.transpose(-1, -2)) * self.scale
